@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Maha Laundry Point of Sale - Sistem Manajemen dan Kasir Laundry Modern & Cepat">
+  <meta name="theme-color" content="#1e293b">
+  <title>Maha Laundry POS - Sistem Kasir & Manajemen Laundry</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Ambient Glass Glow Orbs -->
+  <div class="glass-orb orb-1" aria-hidden="true"></div>
+  <div class="glass-orb orb-2" aria-hidden="true"></div>
+  <div class="glass-orb orb-3" aria-hidden="true"></div>
+
+  <!-- VIEW: LOGIN -->
+  <div id="login-view" class="login-wrap">
+    <div class="login-card-container">
+      <div class="login-glass-card">
+        <div class="login-header">
+          <div class="brand-badge-icon">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <span class="eyebrow"><i class="fa-solid fa-bolt-lightning"></i> LAUNDRY MANAGEMENT SYSTEM</span>
+          <h1>Maha Laundry</h1>
+          <p class="muted">Silakan masuk untuk mengakses sistem POS kasir.</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div class="input-group">
+            <label for="username"><i class="fa-solid fa-user"></i> Username</label>
+            <div class="input-with-icon">
+              <input id="username" type="text" required autocomplete="username" placeholder="Masukkan username"
+                aria-describedby="login-error">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+            <div class="input-with-icon">
+              <input id="password" type="password" required autocomplete="current-password"
+                placeholder="Masukkan password" aria-describedby="login-error">
+              <button type="button" class="btn-toggle-pw" id="toggle-password"
+                aria-label="Tampilkan atau sembunyikan password">
+                <i class="fa-regular fa-eye" id="toggle-password-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-full shadow-lg" type="submit" id="btn-login-submit">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk ke Sistem
+          </button>
+
+          <div id="login-error" class="error-banner" role="alert" aria-live="polite"></div>
+        </form>
+
+        <div class="login-footer">
+          <small><i class="fa-solid fa-shield-halved"></i> Koneksi Terenkripsi & Sistem Multi-Role</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW: MAIN APPLICATION -->
+  <div id="app-view" class="app hidden">
+    <!-- Mobile Top Navigation Header -->
+    <header class="mobile-header" id="mobile-header">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Buka menu navigasi" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="mobile-brand">
+        <div class="mini-logo"><i class="fa-solid fa-shirt"></i></div>
+        <span class="mobile-brand-title">Maha Laundry</span>
+      </div>
+      <div class="mobile-user-indicator" id="mobile-user-badge">
+        <i class="fa-solid fa-circle-user"></i>
+      </div>
+    </header>
+
+    <!-- Backdrop for Mobile Drawer -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+    <!-- Glassmorphic Sidebar -->
+    <aside class="sidebar" id="sidebar" aria-label="Menu Utama">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="logo-box">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <div class="brand-info">
+            <b class="brand-name">Maha Laundry</b>
+            <span class="brand-tag"><i class="fa-solid fa-circle-check text-accent"></i> POINT OF SALE</span>
+          </div>
+        </div>
+        <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Tutup menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navigasi Halaman">
+        <div class="nav-section-title">MENU UTAMA</div>
+        <button data-page="dashboard" class="nav-item active">
+          <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button data-page="kasir" class="nav-item">
+          <span class="nav-icon"><i class="fa-solid fa-cash-register"></i></span>
+          <span class="nav-label">Kasir Baru</span>
+          <span class="nav-badge"><i class="fa-solid fa-plus"></i></span>
+        </button>
+        <button data-page="transaksi" class="nav-item">
+          <span class="nav-icon"><i class="fa-solid fa-receipt"></i></span>
+          <span class="nav-label">Data Transaksi</span>
+        </button>
+
+        <div class="nav-section-title admin-only">ADMINISTRASI</div>
+        <button data-page="harga" class="nav-item admin-only">
+          <span class="nav-icon"><i class="fa-solid fa-tags"></i></span>
+          <span class="nav-label">Pengaturan Layanan</span>
+        </button>
+        <button data-page="laporan" class="nav-item admin-only">
+          <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="nav-label">Laporan Keuangan</span>
+        </button>
+        <button data-page="pengguna" class="nav-item admin-only">
+          <span class="nav-icon"><i class="fa-solid fa-users-gear"></i></span>
+          <span class="nav-label">Manajemen Pengguna</span>
+        </button>
+      </nav>
+
+      <div class="user-box">
+        <div class="user-profile">
+          <div class="user-avatar">
+            <i class="fa-solid fa-user-tie" id="user-avatar-icon"></i>
+          </div>
+          <div class="user-details">
+            <span id="user-name" class="user-name">Nama Kasir</span>
+            <span id="user-role" class="user-role-badge">KASIR</span>
+          </div>
+        </div>
+        <button id="logout" class="btn-logout" title="Keluar dari akun">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Keluar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main" id="main-content">
+      <!-- TOPBAR & RUNNING TEXT MARQUEE -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb">
+            <span class="eyebrow"><i class="fa-solid fa-shop"></i> OUTLET MAHA LAUNDRY</span>
+          </div>
+          <h1 id="page-title">Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <div class="date-chip">
+            <i class="fa-regular fa-calendar-days"></i>
+            <span id="today">Memuat tanggal...</span>
+          </div>
+          <button class="btn btn-primary btn-sm header-action-btn" data-go="kasir">
+            <i class="fa-solid fa-plus"></i>
+            <span>Transaksi Baru</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Glassy Running Text (Announcement Ticker) -->
+      <section class="ticker-container" aria-label="Pengumuman Berjalan">
+        <div class="ticker-pill">
+          <div class="ticker-badge">
+            <i class="fa-solid fa-bullhorn fa-beat-fade"></i>
+            <span>INFO HARI INI</span>
+          </div>
+          <div class="ticker-viewport">
+            <div class="ticker-content" id="ticker-content">
+              <span class="ticker-item"><i class="fa-solid fa-sparkles text-accent"></i> Selamat datang di Maha Laundry
+                POS — Kelola transaksi cucian lebih cepat, tepat, dan transparan!</span>
+              <span class="ticker-item"><i class="fa-solid fa-clock text-accent"></i> Jam Operasional: Buka Setiap Hari
+                pukul 08.00 - 21.00 WITA.</span>
+              <span class="ticker-item" id="ticker-dynamic-stat"><i class="fa-solid fa-circle-check text-accent"></i>
+                Hari Ini: 0 Transaksi tercatat.</span>
+              <span class="ticker-item"><i class="fa-brands fa-whatsapp text-accent"></i> Notifikasi WhatsApp Otomatis
+                aktif saat status cucian diset "Selesai".</span>
+              <span class="ticker-item"><i class="fa-solid fa-credit-card text-accent"></i> Menerima pembayaran Tunai,
+                dan QRIS.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 1: DASHBOARD ================= -->
+      <section id="page-dashboard" class="page">
+        <div class="welcome-banner glass-panel">
+          <div class="welcome-text">
+            <h2>Ringkasan Operasional Laundry</h2>
+            <p class="muted">Pantau data pesanan masuk, pendapatan harian, dan antrean cucian secara langsung.</p>
+          </div>
+          <div class="welcome-actions">
+            <button class="btn btn-primary shadow-md" data-go="kasir">
+              <i class="fa-solid fa-cash-register"></i> Transaksi Kasir Baru
+            </button>
+            <button class="btn btn-glass" data-go="transaksi">
+              <i class="fa-solid fa-receipt"></i> Data Transaksi
+            </button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card glass-panel stat-primary">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-receipt"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Transaksi Hari Ini</span>
+              <b class="stat-val" id="dash-orders">0</b>
+            </div>
+          </article>
+
+          <article class="stat-card glass-panel stat-success">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Pendapatan Hari Ini</span>
+              <b class="stat-val" id="dash-revenue">Rp0</b>
+            </div>
+          </article>
+
+          <article class="stat-card glass-panel stat-warning">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Sedang Diproses</span>
+              <b class="stat-val" id="dash-process">0</b>
+            </div>
+          </article>
+
+          <article class="stat-card glass-panel stat-info-alt">
+            <div class="stat-icon-wrap"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Selesai / Diambil</span>
+              <b class="stat-val" id="dash-done">0</b>
+            </div>
+          </article>
+        </div>
+
+        <div class="glass-panel main-panel">
+          <div class="panel-head">
+            <div>
+              <h3><i class="fa-solid fa-clock-rotate-left"></i> Transaksi Terbaru</h3>
+              <p class="muted">Daftar transaksi laundry terakhir yang masuk ke sistem kasir.</p>
+            </div>
+            <button class="link-btn" data-go="transaksi">
+              <span>Lihat Semua Transaksi</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th scope="col"><i class="fa-solid fa-hashtag"></i> Nota</th>
+                  <th scope="col"><i class="fa-solid fa-user"></i> Pelanggan</th>
+                  <th scope="col"><i class="fa-solid fa-wallet"></i> Total & Pembayaran</th>
+                  <th scope="col"><i class="fa-solid fa-tag"></i> Status Cucian</th>
+                </tr>
+              </thead>
+              <tbody id="recent-table">
+                <tr>
+                  <td colspan="4" class="text-center muted">Memuat data transaksi terbaru...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 2: KASIR BARU ================= -->
+      <section id="page-kasir" class="page hidden">
+        <div class="intro-header">
+          <div>
+            <h2><i class="fa-solid fa-cash-register"></i> Kasir Transaksi Baru</h2>
+            <p class="muted">Input data pelanggan, pilih layanan laundry, dan tetapkan metode pembayaran.</p>
+          </div>
+        </div>
+
+        <div class="glass-panel main-panel">
+          <form id="order-form" autocomplete="off">
+            <div class="section-divider-title">
+              <i class="fa-solid fa-id-card"></i> <span>Data Pelanggan & Estimasi</span>
+            </div>
+
+            <div class="form-grid">
+              <div class="input-group">
+                <label for="cust-name"><i class="fa-solid fa-user"></i> Nama Pelanggan <span
+                    class="required">*</span></label>
+                <input id="cust-name" required placeholder="Contoh: Budi Santoso">
+              </div>
+              <div class="input-group">
+                <label for="cust-phone"><i class="fa-brands fa-whatsapp"></i> Nomor WhatsApp <span
+                    class="required">*</span></label>
+                <input id="cust-phone" required placeholder="08xxxxxxxxxx" type="tel">
+              </div>
+              <div class="input-group">
+                <label for="due-date"><i class="fa-solid fa-calendar-day"></i> Estimasi Selesai</label>
+                <input id="due-date" type="date">
+              </div>
+              <div class="input-group">
+                <label><i class="fa-solid fa-wallet"></i> Metode Pembayaran</label>
+                <!-- Visual Payment Selector Cards -->
+                <div class="payment-selector-grid">
+                  <label class="pay-option">
+                    <input type="radio" name="order-payment" value="Tunai" checked>
+                    <span class="pay-card">
+                      <i class="fa-solid fa-money-bill-wave text-success"></i>
+                      <span>Tunai (Cash)</span>
+                    </span>
+                  </label>
+                  <label class="pay-option">
+                    <input type="radio" name="order-payment" value="QRIS">
+                    <span class="pay-card">
+                      <i class="fa-solid fa-qrcode text-primary"></i>
+                      <span>QRIS</span>
+                    </span>
+                  </label>
+                  <label class="pay-option">
+                    <input type="radio" name="order-payment" value="Belum Dibayar">
+                    <span class="pay-card">
+                      <i class="fa-solid fa-hourglass-half text-warning"></i>
+                      <span>Belum Dibayar</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-subhead">
+              <div>
+                <h3 class="section-subtitle"><i class="fa-solid fa-basket-shopping"></i> Rincian Item Layanan</h3>
+                <p class="muted">Tambahkan satu atau beberapa varian cucian untuk nota ini.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="add-item">
+                <i class="fa-solid fa-plus"></i> Tambah Item
+              </button>
+            </div>
+
+            <div id="items-list" class="items-container">
+              <!-- Item rows injected here -->
+            </div>
+
+            <div class="form-grid space-top">
+              <div class="input-group">
+                <label for="discount"><i class="fa-solid fa-percent"></i> Diskon Potongan (Rp)</label>
+                <input id="discount" type="number" min="0" step="1000" value="0" placeholder="0">
+              </div>
+              <div class="input-group">
+                <label for="notes"><i class="fa-solid fa-note-sticky"></i> Catatan Khusus Cucian</label>
+                <textarea id="notes" rows="2"
+                  placeholder="Contoh: Pewangi ekstra, noda di kerah, luntur dipisah..."></textarea>
+              </div>
+            </div>
+
+            <div class="total-summary-card glass-panel-accent">
+              <div class="total-detail">
+                <span class="total-label">Total Pembayaran Nota:</span>
+                <span class="muted font-xs">Sudah termasuk diskon dan layanan yang dipilih</span>
+              </div>
+              <strong id="order-total" class="total-amount">Rp0</strong>
+            </div>
+
+            <div class="form-submit-actions">
+              <button class="btn btn-primary btn-lg shadow-lg" type="submit" id="btn-save-order">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Transaksi & Terbitkan Nota
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 3: MENU TRANSAKSI (DENGAN PEMISAHAN PER TANGGAL, BULAN, TAHUN & PEMBAYARAN) ================= -->
+      <section id="page-transaksi" class="page hidden">
+        <div class="intro-header">
+          <div>
+            <h2><i class="fa-solid fa-receipt"></i> Data & Riwayat Transaksi</h2>
+            <p class="muted">Filter transaksi berdasarkan tanggal, bulan, tahun, atau metode pembayaran.</p>
+          </div>
+        </div>
+
+        <!-- Filter Panel Glassy -->
+        <div class="glass-panel main-panel">
+          <!-- Waktu: Tab Filter (Semua, Per Tanggal, Per Bulan, Per Tahun) -->
+          <div class="filter-header">
+            <span class="filter-title"><i class="fa-solid fa-filter"></i> Periode Waktu:</span>
+            <div class="period-tabs" role="tablist" aria-label="Filter Periode Transaksi">
+              <button type="button" class="period-tab active" data-period="all">
+                <i class="fa-solid fa-globe"></i> Semua Waktu
+              </button>
+              <button type="button" class="period-tab" data-period="daily">
+                <i class="fa-solid fa-calendar-day"></i> Per Tanggal
+              </button>
+              <button type="button" class="period-tab" data-period="monthly">
+                <i class="fa-solid fa-calendar-week"></i> Per Bulan
+              </button>
+              <button type="button" class="period-tab" data-period="yearly">
+                <i class="fa-solid fa-calendar"></i> Per Tahun
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Period Controls & Filters Container -->
+          <div class="advanced-filter-bar">
+            <!-- Dynamic Date Pickers -->
+            <div id="filter-date-container" class="period-selector-box hidden">
+              <label for="filter-date" class="filter-label"><i class="fa-solid fa-calendar-day"></i> Pilih
+                Tanggal:</label>
+              <div class="filter-input-wrap">
+                <input type="date" id="filter-date" class="filter-control">
+                <div class="quick-date-btns">
+                  <button type="button" class="btn-chip" id="btn-quick-today">Hari Ini</button>
+                  <button type="button" class="btn-chip" id="btn-quick-yesterday">Kemarin</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="filter-month-container" class="period-selector-box hidden">
+              <label for="filter-month" class="filter-label"><i class="fa-solid fa-calendar-week"></i> Pilih Bulan &
+                Tahun:</label>
+              <div class="filter-input-wrap">
+                <input type="month" id="filter-month" class="filter-control">
+                <button type="button" class="btn-chip" id="btn-quick-this-month">Bulan Ini</button>
+              </div>
+            </div>
+
+            <div id="filter-year-container" class="period-selector-box hidden">
+              <label for="filter-year" class="filter-label"><i class="fa-solid fa-calendar"></i> Pilih Tahun:</label>
+              <div class="filter-input-wrap">
+                <select id="filter-year" class="filter-control">
+                  <!-- Filled via JS -->
+                </select>
+                <button type="button" class="btn-chip" id="btn-quick-this-year">Tahun Ini</button>
+              </div>
+            </div>
+
+            <!-- Filter Dropdowns: Metode Pembayaran, Status Pembayaran, Status Cucian -->
+            <div class="filter-dropdown-group">
+              <div class="filter-select-item">
+                <label for="filter-payment-method" class="filter-label"><i class="fa-solid fa-wallet"></i> Metode
+                  Bayar:</label>
+                <select id="filter-payment-method" class="filter-control">
+                  <option value="">Semua Metode</option>
+                  <option value="Tunai">Tunai (Cash)</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="Belum Dibayar">Belum Dibayar</option>
+                </select>
+              </div>
+
+              <div class="filter-select-item">
+                <label for="filter-payment-status" class="filter-label"><i
+                    class="fa-solid fa-circle-dollar-to-slot"></i> Status Bayar:</label>
+                <select id="filter-payment-status" class="filter-control">
+                  <option value="">Semua Status Bayar</option>
+                  <option value="Lunas">Lunas</option>
+                  <option value="Belum Lunas">Belum Lunas</option>
+                </select>
+              </div>
+
+              <div class="filter-select-item">
+                <label for="filter-status" class="filter-label"><i class="fa-solid fa-spinner"></i> Status
+                  Cucian:</label>
+                <select id="filter-status" class="filter-control">
+                  <option value="">Semua Status Cucian</option>
+                  <option value="Diterima">Diterima</option>
+                  <option value="Diproses">Diproses</option>
+                  <option value="Selesai">Selesai</option>
+                  <option value="Sudah Diambil">Sudah Diambil</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search Input & Reset Button -->
+          <div class="search-and-summary-bar">
+            <div class="search-wrap">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input id="order-search" class="search-input"
+                placeholder="Cari nomor nota, nama pelanggan, atau no. WA...">
+              <button type="button" class="btn-clear-search hidden" id="btn-clear-search"
+                aria-label="Bersihkan pencarian">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </button>
+            </div>
+            <button type="button" class="btn btn-glass btn-sm" id="btn-reset-filters">
+              <i class="fa-solid fa-rotate-left"></i> Reset Filter
+            </button>
+          </div>
+
+          <!-- Live Filter Summary Badges -->
+          <div class="filter-summary-cards" id="filter-summary-cards">
+            <div class="summary-badge-item">
+              <span class="summary-label">Total Transaksi:</span>
+              <b id="summary-total-orders" class="summary-value">0</b>
+            </div>
+            <div class="summary-badge-item">
+              <span class="summary-label">Total Omset:</span>
+              <b id="summary-total-revenue" class="summary-value text-accent">Rp0</b>
+            </div>
+            <div class="summary-badge-item">
+              <span class="summary-label">Sudah Lunas:</span>
+              <b id="summary-total-paid" class="summary-value text-success">Rp0</b>
+            </div>
+            <div class="summary-badge-item">
+              <span class="summary-label">Belum Lunas:</span>
+              <b id="summary-total-unpaid" class="summary-value text-warning">Rp0</b>
+            </div>
+          </div>
+
+          <!-- Transaction Table -->
+          <div class="table-container space-top">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th scope="col"><i class="fa-solid fa-receipt"></i> Nota & Waktu</th>
+                  <th scope="col"><i class="fa-solid fa-user"></i> Pelanggan & WA</th>
+                  <th scope="col"><i class="fa-solid fa-coins"></i> Nilai Transaksi</th>
+                  <th scope="col"><i class="fa-solid fa-credit-card"></i> Metode & Pembayaran</th>
+                  <th scope="col"><i class="fa-solid fa-tag"></i> Status Cucian</th>
+                  <th scope="col" class="text-right"><i class="fa-solid fa-gear"></i> Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table">
+                <tr>
+                  <td colspan="6" class="text-center muted">Memuat data transaksi...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 4: PENGATURAN HARGA LAYANAN ================= -->
+      <section id="page-harga" class="page admin-only hidden">
+        <div class="intro-header">
+          <div>
+            <h2><i class="fa-solid fa-tags"></i> Pengaturan Harga & Layanan</h2>
+            <p class="muted">Kelola tarif laundry kiloan, satuan, bed cover, sepatu, dan layanan express.</p>
+          </div>
+        </div>
+
+        <div class="glass-panel main-panel">
+          <div class="section-divider-title">
+            <i class="fa-solid fa-pen-to-square"></i> <span id="service-form-title">Tambah Layanan Baru</span>
+          </div>
+
+          <form id="service-form" class="form-grid">
+            <div class="input-group">
+              <label for="service-name"><i class="fa-solid fa-shirt"></i> Nama Layanan <span
+                  class="required">*</span></label>
+              <input id="service-name" required placeholder="Contoh: Cuci Kering Setrika Premium">
+            </div>
+
+            <div class="input-group">
+              <label for="service-category"><i class="fa-solid fa-layer-group"></i> Kategori</label>
+              <select id="service-category">
+                <option value="kiloan">Kiloan (Timbangan Berat)</option>
+                <option value="satuan">Satuan (Per Pcs/Item)</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="service-unit"><i class="fa-solid fa-scale-balanced"></i> Satuan Hitung</label>
+              <select id="service-unit">
+                <option value="kg">Kilogram (kg)</option>
+                <option value="pcs">Pcs / Lembar</option>
+                <option value="pasang">Pasang (Sepatu/Kaos Kaki)</option>
+                <option value="item">Item Lainnya</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="service-price"><i class="fa-solid fa-money-bill"></i> Tarif Harga (Rp) <span
+                  class="required">*</span></label>
+              <input id="service-price" type="number" min="0" step="500" required placeholder="Contoh: 10000">
+            </div>
+
+            <div class="input-group">
+              <label for="service-active"><i class="fa-solid fa-toggle-on"></i> Status Ketersediaan</label>
+              <select id="service-active">
+                <option value="1">Aktif (Tampil di Kasir)</option>
+                <option value="0">Nonaktif (Sembunyikan)</option>
+              </select>
+            </div>
+
+            <div class="form-actions-full">
+              <button id="service-submit" class="btn btn-primary" type="submit">
+                <i class="fa-solid fa-plus"></i> Tambah Layanan
+              </button>
+              <button id="service-cancel" class="btn btn-secondary hidden" type="button">
+                <i class="fa-solid fa-xmark"></i> Batal Ubah
+              </button>
+            </div>
+          </form>
+
+          <div class="table-container space-top">
+            <div class="panel-subhead">
+              <h3><i class="fa-solid fa-list-check"></i> Daftar Master Layanan</h3>
+            </div>
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th scope="col">Nama Layanan</th>
+                  <th scope="col">Kategori</th>
+                  <th scope="col">Satuan</th>
+                  <th scope="col">Tarif Harga</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="services-table">
+                <tr>
+                  <td colspan="6" class="text-center muted">Memuat data layanan...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 5: LAPORAN PENDAPATAN ================= -->
+      <section id="page-laporan" class="page admin-only hidden">
+        <div class="intro-header">
+          <div>
+            <h2><i class="fa-solid fa-chart-line"></i> Laporan Pendapatan & Omset</h2>
+            <p class="muted">Analisis rekap pendapatan laundry harian, mingguan, dan bulanan.</p>
+          </div>
+        </div>
+
+        <div class="glass-panel main-panel">
+          <div class="report-toolbar">
+            <div class="filter-select-item">
+              <label for="report-period" class="filter-label"><i class="fa-solid fa-filter"></i> Periode
+                Laporan:</label>
+              <select id="report-period" class="filter-control">
+                <option value="daily">Harian</option>
+                <option value="weekly">Mingguan</option>
+                <option value="monthly">Bulanan</option>
+              </select>
+            </div>
+
+            <div class="filter-select-item">
+              <label for="report-date" class="filter-label"><i class="fa-solid fa-calendar-day"></i> Tanggal
+                Acuan:</label>
+              <input id="report-date" type="date" class="filter-control">
+            </div>
+
+            <button id="load-report" class="btn btn-primary">
+              <i class="fa-solid fa-magnifying-glass-chart"></i> Tampilkan Laporan
+            </button>
+          </div>
+
+          <div class="stats-grid report-stats-grid space-top">
+            <article class="stat-card glass-panel stat-primary">
+              <div class="stat-icon-wrap"><i class="fa-solid fa-receipt"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Total Transaksi</span>
+                <b class="stat-val" id="report-orders">0</b>
+              </div>
+            </article>
+
+            <article class="stat-card glass-panel stat-success">
+              <div class="stat-icon-wrap"><i class="fa-solid fa-wallet"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Total Omset Kotor</span>
+                <b class="stat-val" id="report-revenue">Rp0</b>
+              </div>
+            </article>
+
+            <article class="stat-card glass-panel stat-info-alt">
+              <div class="stat-icon-wrap"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Pendapatan Lunas</span>
+                <b class="stat-val" id="report-paid">Rp0</b>
+              </div>
+            </article>
+          </div>
+
+          <div class="table-container space-top">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th scope="col"><i class="fa-solid fa-calendar"></i> Tanggal Transaksi</th>
+                  <th scope="col"><i class="fa-solid fa-receipt"></i> Jumlah Pesanan</th>
+                  <th scope="col"><i class="fa-solid fa-money-bill-wave"></i> Total Pendapatan</th>
+                </tr>
+              </thead>
+              <tbody id="report-table">
+                <tr>
+                  <td colspan="3" class="text-center muted">Pilih periode dan klik tampilkan.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 6: MANAJEMEN PENGGUNA ================= -->
+      <section id="page-pengguna" class="page admin-only hidden">
+        <div class="intro-header">
+          <div>
+            <h2><i class="fa-solid fa-users-gear"></i> Manajemen Akun Pengguna</h2>
+            <p class="muted">Tambah staf kasir baru atau atur hak akses admin. Riwayat transaksi tetap aman.</p>
+          </div>
+        </div>
+
+        <div class="glass-panel main-panel">
+          <div class="section-divider-title">
+            <i class="fa-solid fa-user-plus"></i> <span>Buat Akun Staf Baru</span>
+          </div>
+
+          <form id="user-form" class="form-grid">
+            <div class="input-group">
+              <label for="new-name"><i class="fa-solid fa-signature"></i> Nama Lengkap <span
+                  class="required">*</span></label>
+              <input id="new-name" required placeholder="Contoh: Rina Wahyuni">
+            </div>
+
+            <div class="input-group">
+              <label for="new-username"><i class="fa-solid fa-at"></i> Username Login <span
+                  class="required">*</span></label>
+              <input id="new-username" required placeholder="Contoh: rina_kasir">
+            </div>
+
+            <div class="input-group">
+              <label for="new-password"><i class="fa-solid fa-key"></i> Password (min. 8 karakter) <span
+                  class="required">*</span></label>
+              <input id="new-password" type="password" minlength="8" required placeholder="Minimal 8 karakter">
+            </div>
+
+            <div class="input-group">
+              <label for="new-role"><i class="fa-solid fa-shield-halved"></i> Role Hak Akses</label>
+              <select id="new-role">
+                <option value="kasir">Kasir (Input Transaksi)</option>
+                <option value="admin">Administrator (Akses Penuh)</option>
+              </select>
+            </div>
+
+            <div class="form-actions-full">
+              <button class="btn btn-primary" type="submit">
+                <i class="fa-solid fa-user-check"></i> Buat Akun Pengguna
+              </button>
+            </div>
+          </form>
+
+          <div class="table-container space-top">
+            <div class="panel-subhead">
+              <h3><i class="fa-solid fa-users"></i> Daftar Pengguna Aktif & Nonaktif</h3>
+            </div>
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th scope="col">Nama Lengkap</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status Akun</th>
+                  <th scope="col" class="text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="users-table">
+                <tr>
+                  <td colspan="5" class="text-center muted">Memuat data pengguna...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= MODAL: DETAIL & CETAK NOTA STRUK ================= -->
+  <div id="receipt-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"
+    aria-labelledby="modal-receipt-title">
+    <div class="modal-card receipt-card">
+      <div class="modal-header">
+        <h3 id="modal-receipt-title"><i class="fa-solid fa-receipt"></i> Detail & Cetak Struk Nota</h3>
+        <button type="button" class="modal-close-btn" id="close-receipt-modal" aria-label="Tutup popup">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Printable Thermal Invoice Preview -->
+      <div class="receipt-body" id="receipt-content">
+        <div class="thermal-receipt">
+          <div class="receipt-store-header">
+            <div class="receipt-icon"><i class="fa-solid fa-shirt"></i></div>
+            <h2 class="receipt-store-name">MAHA LAUNDRY</h2>
+            <p class="receipt-store-sub">Jasa Laundry Kiloan & Satuan Berkualitas</p>
+            <p class="receipt-store-info">WhatsApp: 0812-3456-7890 | Buka: 07.00 - 21.00</p>
+            <div class="receipt-divider">================================</div>
+          </div>
+
+          <div class="receipt-meta-grid">
+            <div class="receipt-meta-row">
+              <span>No. Nota:</span>
+              <strong id="rc-invoice">ML-000000</strong>
+            </div>
+            <div class="receipt-meta-row">
+              <span>Tanggal:</span>
+              <span id="rc-date">-</span>
+            </div>
+            <div class="receipt-meta-row">
+              <span>Kasir:</span>
+              <span id="rc-cashier">-</span>
+            </div>
+            <div class="receipt-meta-row">
+              <span>Pelanggan:</span>
+              <strong id="rc-customer">-</strong>
+            </div>
+            <div class="receipt-meta-row">
+              <span>No. WA:</span>
+              <span id="rc-phone">-</span>
+            </div>
+            <div class="receipt-meta-row">
+              <span>Est. Selesai:</span>
+              <span id="rc-due">-</span>
+            </div>
+          </div>
+
+          <div class="receipt-divider">--------------------------------</div>
+
+          <div class="receipt-items-table" id="rc-items">
+            <!-- Items injected via JS -->
+          </div>
+
+          <div class="receipt-divider">--------------------------------</div>
+
+          <div class="receipt-calc-table">
+            <div class="receipt-calc-row">
+              <span>Subtotal:</span>
+              <span id="rc-subtotal">Rp0</span>
+            </div>
+            <div class="receipt-calc-row">
+              <span>Diskon:</span>
+              <span id="rc-discount">Rp0</span>
+            </div>
+            <div class="receipt-calc-row receipt-total-row">
+              <strong>TOTAL BAYAR:</strong>
+              <strong id="rc-total">Rp0</strong>
+            </div>
+            <div class="receipt-calc-row">
+              <span>Metode Pembayaran:</span>
+              <span id="rc-payment-method">Tunai</span>
+            </div>
+            <div class="receipt-calc-row">
+              <span>Status Pembayaran:</span>
+              <span id="rc-payment-status">Lunas</span>
+            </div>
+            <div class="receipt-calc-row">
+              <span>Status Cucian:</span>
+              <span id="rc-status">Diproses</span>
+            </div>
+          </div>
+
+          <div class="receipt-divider" id="rc-notes-divider">--------------------------------</div>
+          <div class="receipt-notes" id="rc-notes-box">
+            <span>Catatan:</span>
+            <p id="rc-notes">-</p>
+          </div>
+
+          <div class="receipt-footer">
+            <div class="receipt-divider">================================</div>
+            <p class="receipt-thanks">Terima kasih atas kepercayaan Anda!</p>
+            <p class="receipt-terms">Simpan nota ini saat pengambilan cucian.<br>Komplain maksimal 1x24 jam setelah
+              diambil.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-print-receipt">
+          <i class="fa-solid fa-print"></i> Cetak Struk
+        </button>
+        <button type="button" class="btn btn-whatsapp" id="btn-wa-share">
+          <i class="fa-brands fa-whatsapp"></i> Kirim WhatsApp
+        </button>
+        <button type="button" class="btn btn-glass" id="btn-close-receipt">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: UPDATE PEMBAYARAN CEPAT ================= -->
+  <div id="payment-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"
+    aria-labelledby="modal-payment-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-payment-title"><i class="fa-solid fa-wallet"></i> Perbarui Pembayaran</h3>
+        <button type="button" class="modal-close-btn" id="close-payment-modal" aria-label="Tutup popup">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="payment-form" class="modal-body">
+        <input type="hidden" id="pay-order-id">
+        <div class="order-pay-summary">
+          <div>Nota: <strong id="pay-modal-invoice">-</strong></div>
+          <div>Pelanggan: <span id="pay-modal-customer">-</span></div>
+          <div>Total Tagihan: <strong id="pay-modal-amount" class="text-accent">-</strong></div>
+        </div>
+
+        <div class="input-group">
+          <label for="pay-modal-method"><i class="fa-solid fa-credit-card"></i> Pilih Metode Pembayaran:</label>
+          <select id="pay-modal-method" class="filter-control">
+            <option value="Tunai">Tunai (Cash)</option>
+            <option value="QRIS">QRIS</option>
+            <option value="Belum Dibayar">Belum Dibayar</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="pay-modal-status"><i class="fa-solid fa-circle-check"></i> Status Pembayaran:</label>
+          <select id="pay-modal-status" class="filter-control">
+            <option value="Lunas">Lunas</option>
+            <option value="Belum Lunas">Belum Lunas</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-pay">Batal</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Simpan Pembayaran</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast-notification" role="status" aria-live="polite">
+    <i class="fa-solid fa-circle-info toast-icon"></i>
+    <span id="toast-message">Notifikasi</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
