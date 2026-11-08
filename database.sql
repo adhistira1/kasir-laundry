@@ -83,15 +83,23 @@ CREATE TABLE IF NOT EXISTS `order_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ====================================================================
--- SEED DATA AWAL: AKUN ADMIN & DAFTAR LAYANAN
+-- SEED DATA AWAL: AKUN ADMIN, KASIR & DAFTAR LAYANAN
 -- ====================================================================
 
 -- Akun Administrator Default (Login: admin / Admin123!)
 INSERT INTO `users` (`name`, `username`, `password_hash`, `role`, `active`)
-VALUES ('Administrator', 'admin', '$2a$10$RstJKU6NuBiWglIYpAiwtuNmr6Jj9AkjN3zE.3RkTOPmsEBEpU4bS', 'admin', 1)
+VALUES ('Administrator', 'admin', '$2a$10$bnHTHsQ7Oak2cE7PCuBlpeMGD9MAk5MqUtINc21nhM.rYnIr.Nv8.', 'admin', 1)
 ON DUPLICATE KEY UPDATE 
   `password_hash` = VALUES(`password_hash`),
   `role` = 'admin',
+  `active` = 1;
+
+-- Akun Kasir Default (Login: kasir / Kasir123!)
+INSERT INTO `users` (`name`, `username`, `password_hash`, `role`, `active`)
+VALUES ('Kasir Toko', 'kasir', '$2a$10$hllw4ruqyIgIvWCeTEB27.F6iRzLos8uOBo8.YtVDS5TC8FEmXF.q', 'kasir', 1)
+ON DUPLICATE KEY UPDATE 
+  `password_hash` = VALUES(`password_hash`),
+  `role` = 'kasir',
   `active` = 1;
 
 -- Master Layanan Awal

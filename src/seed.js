@@ -136,28 +136,31 @@ if (useSSL) {
       console.log("[✓] Layanan default berhasil diisi.");
     }
 
-    // 9. Buat atau perbarui akun admin default
-    const username = "admin";
-    const password = "Admin123!";
-    const hash = await bcrypt.hash(password, 12);
+    // 9. Buat atau perbarui akun admin dan kasir default
+    const defaultUsers = [
+      { name: "Administrator", username: "admin", password: "Admin123!", role: "admin" },
+      { name: "Kasir Toko", username: "kasir", password: "Kasir123!", role: "kasir" },
+    ];
 
-    const [[existing]] = await pool.query("SELECT id FROM users WHERE username=?", [username]);
-    if (existing) {
-      // Pastikan password admin di-reset ke Admin123! dan aktif
-      await pool.query("UPDATE users SET password_hash=?, active=1, role='admin' WHERE id=?", [hash, existing.id]);
-      console.log("[✓] Akun admin ditemukan dan password telah direset ke default.");
-    } else {
-      await pool.query(
-        "INSERT INTO users (name, username, password_hash, role, active) VALUES (?, ?, ?, 'admin', 1)",
-        ["Administrator", username, hash]
-      );
-      console.log("[✓] Akun admin baru berhasil dibuat.");
+    for (const u of defaultUsers) {
+      const hash = await bcrypt.hash(u.password, 10);
+      const [[existing]] = await pool.query("SELECT id FROM users WHERE username=?", [u.username]);
+      if (existing) {
+        await pool.query("UPDATE users SET password_hash=?, active=1, role=? WHERE id=?", [hash, u.role, existing.id]);
+        console.log(`[✓] Akun ${u.role} (${u.username}) diperbarui dan password direset ke default.`);
+      } else {
+        await pool.query(
+          "INSERT INTO users (name, username, password_hash, role, active) VALUES (?, ?, ?, ?, 1)",
+          [u.name, u.username, hash, u.role]
+        );
+        console.log(`[✓] Akun ${u.role} baru (${u.username}) berhasil dibuat.`);
+      }
     }
 
     console.log("-----------------------------------------");
     console.log("  KREDENSIAL LOGIN ANDA:");
-    console.log(`  Username : ${username}`);
-    console.log(`  Password : ${password}`);
+    console.log("  1. Admin  -> Username: admin | Password: Admin123!");
+    console.log("  2. Kasir  -> Username: kasir | Password: Kasir123!");
     console.log("-----------------------------------------");
     console.log("SIAP DIGUNAKAN! Silakan jalankan: npm.cmd start atau npm.cmd run dev");
   } catch (err) {

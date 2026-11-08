@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
@@ -12,7 +13,7 @@ const app = express();
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use("/api/auth/login", rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: true, legacyHeaders: false }));
 
 const asyncRoute = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
@@ -301,24 +302,29 @@ app.use((err,req,res,next)=>{
   res.status(500).json({message});
 });
 
-const port=Number(process.env.PORT||3000);
-app.listen(port, async () => {
-  console.log(`\n=========================================`);
-  console.log(`  MAHA LAUNDRY POS AKTIF`);
-  console.log(`  Buka di browser: http://localhost:${port}`);
-  console.log(`=========================================`);
-  try {
-    await pool.query("SELECT 1");
-    console.log(`[✓] Koneksi database MySQL: BERHASIL TERHUBUNG`);
-  } catch (err) {
-    console.error(`[!] PERINGATAN DATABASE: Gagal terhubung ke MySQL (${err.code || err.message}).`);
-    if (err.code === "ECONNREFUSED") {
-      console.error(`    -> MySQL server di laptop Anda belum menyala pada port 3306.`);
-      console.error(`    -> Silakan buka XAMPP / MySQL Service dan klik START.`);
-    } else if (err.code === "ER_ACCESS_DENIED_ERROR") {
-      console.error(`    -> Password MySQL salah. Silakan sesuaikan DB_PASSWORD di file .env.`);
-    } else if (err.code === "ER_BAD_DB_ERROR") {
-      console.error(`    -> Database 'laundry_pos' belum dibuat. Jalankan database.sql di MySQL Workbench.`);
+const port = Number(process.env.PORT || 3000);
+
+if (!process.env.VERCEL) {
+  app.listen(port, async () => {
+    console.log(`\n=========================================`);
+    console.log(`  MAHA LAUNDRY POS AKTIF`);
+    console.log(`  Buka di browser: http://localhost:${port}`);
+    console.log(`=========================================`);
+    try {
+      await pool.query("SELECT 1");
+      console.log(`[✓] Koneksi database MySQL: BERHASIL TERHUBUNG`);
+    } catch (err) {
+      console.error(`[!] PERINGATAN DATABASE: Gagal terhubung ke MySQL (${err.code || err.message}).`);
+      if (err.code === "ECONNREFUSED") {
+        console.error(`    -> MySQL server di laptop Anda belum menyala pada port 3306.`);
+        console.error(`    -> Silakan buka XAMPP / MySQL Service dan klik START.`);
+      } else if (err.code === "ER_ACCESS_DENIED_ERROR") {
+        console.error(`    -> Password MySQL salah. Silakan sesuaikan DB_PASSWORD di file .env.`);
+      } else if (err.code === "ER_BAD_DB_ERROR") {
+        console.error(`    -> Database 'laundry_pos' belum dibuat. Jalankan database.sql di MySQL Workbench.`);
+      }
     }
-  }
-});
+  });
+}
+
+module.exports = app;
